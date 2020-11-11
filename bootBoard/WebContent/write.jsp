@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="bbs.BbsDAO, bbs.Bbs, java.util.Vector" %>
 <%
 	String id = (String)session.getAttribute("userId");
-	String opt = "";
 	if(id == null) {
-		opt = " disabled";
+		response.sendRedirect("bbs.jsp");
 	}
 %>
 <!doctype html>
@@ -64,48 +62,31 @@
 			</div>
 		</nav>
 		<div class="container pt-3">
-			<table class="table table-striped text-center">
-				<thead class="thead-light">
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-					</tr>
-				</thead>
-				<tbody>
-<%
-				int pageNumber = 1;
-				if (request.getParameter("pageNumber") != null) {
-					pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-				}
-				BbsDAO bbsDAO = new BbsDAO();
-				Vector<Bbs> list = bbsDAO.getList(pageNumber);
-				for(int i = 0; i < list.size(); i++) {
-%>
-					<tr>
-						<td><%=list.get(i).getBbsId() %></td>
-						<td><a href="view.jsp?bbsId=<%=list.get(i).getBbsId() %> ">
-							<%=list.get(i).getBbsTitle() %>
-						</a></td>
-						<td><%=list.get(i).getUserId() %></td>
-						<td><%= list.get(i).getBbsDate() %></td>
-					</tr>
-				</tbody>
-			</table>
-<%
-	if(pageNumber != 1) {
-%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber - 1 %>" class="btn btn-success mr-1">이전</a>
-<%
-	}
-	if(bbsDAO.nextPage(pageNumber+1)) {
-%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber + 1 %>" class="btn btn-success">다음</a>
-<%
-	}
-%>			
-			<a href="write.jsp" class="btn btn-primary float-right<%=opt %>" id="writeBtn">글쓰기</a>
+			<form method="post" action="writeAction.jsp">
+				<table class="table table-striped text-center">
+					<thead class="thead-light">
+						<tr>
+							<th>게시판 글쓰기</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" class="form-control" placeholder="글 제목"
+								name="bbsTitle" maxlength="50" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<textarea class="form-control" placeholder="글 내용" name="bbsContent"
+								maxlength="2048" style="height:350px; resize:none;"></textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<a href="bbs.jsp" class="btn btn-success float-left">목록</a>
+				<button type="submit" class="btn btn-primary float-right">글쓰기</button>
+			</form>
 		</div>
 			
 		<!-- Optional JavaScript; -->
