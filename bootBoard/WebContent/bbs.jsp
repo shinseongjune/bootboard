@@ -26,10 +26,10 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" href="main.jsp">메인<span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="main.jsp">메인</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="bbs.jsp">게시판</a>
+						<a class="nav-link active" href="bbs.jsp">게시판<span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
@@ -59,7 +59,26 @@
 			</div>
 		</nav>
 		<div class="container pt-3">
-			<h2>메인페이지입니다.</h2>
+			<div class="row">
+				<table class="table table-striped text-center">
+					<thead class="thead-light">
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>안녕하세요!</td>
+							<td>홍길동</td>
+							<td>2018-01-01</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 			
 		<!-- Optional JavaScript; -->
