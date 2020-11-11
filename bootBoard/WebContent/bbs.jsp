@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="bbs.BbsDAO, bbs.Bbs, java.util.Vector" %>
+<%@ page import="bbs.BbsDAO" %>
+<%@ page import="bbs.Bbs" %>
+<%@ page import="java.util.Vector" %>
 <%
 	String id = (String)session.getAttribute("userId");
 	String opt = "";
@@ -91,6 +93,9 @@
 						<td><%=list.get(i).getUserId() %></td>
 						<td><%= list.get(i).getBbsDate() %></td>
 					</tr>
+<%
+				}
+%>
 				</tbody>
 			</table>
 <%

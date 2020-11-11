@@ -93,7 +93,7 @@ public class BbsDAO {
 			while(rs.next()) {
 				Bbs bbs = new Bbs();
 				bbs.setBbsId(rs.getInt(1));
-				bbs.setBbsTitle(rs.getNString(2));
+				bbs.setBbsTitle(rs.getString(2));
 				bbs.setUserId(rs.getString(3));
 				bbs.setBbsDate(rs.getString(4));
 				bbs.setBbsContent(rs.getString(5));
