@@ -71,10 +71,10 @@ public class BbsDAO {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,  getNext());
-			pstmt.setString(2, bbsTitle.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>"));
+			pstmt.setString(2, bbsTitle);
 			pstmt.setString(3, userId);
 			pstmt.setString(4, getDate());
-			pstmt.setString(5, bbsContent.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>"));
+			pstmt.setString(5, bbsContent);
 			pstmt.setInt(6, 1);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -141,5 +141,19 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int update(int bbsId, String bbsTitle, String bbsContent) {
+		String sql = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsId = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsId);
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류 코드
 	}
 }

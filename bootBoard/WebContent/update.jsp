@@ -2,10 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="bbs.BbsDAO, bbs.Bbs" %>
 <%
-	String userId = null;
-	if(session.getAttribute("userId") != null) userId = (String) session.getAttribute("userId");
-	int bbsId = 0;
-	if(request.getParameter("bbsId") != null) bbsId = Integer.parseInt(request.getParameter("bbsId"));
+	String userId = (String)session.getAttribute("userId");
 %>
 <!doctype html>
 <html>
@@ -63,7 +60,18 @@
 			</div>
 		</nav>
 <%
-	if(bbsId == 0) {
+	if (session.getAttribute("userId") != null)
+		userId = (String) session.getAttribute("userId");
+	if (userId == null) {
+		out.println("<script>");
+		out.println("alert('로그인을 하세요.')");
+		out.println("location.href = 'loginjsp'");
+		out.println("</script>");
+	}
+	int bbsId = 0;
+	if (request.getParameter("bbsId") != null)
+		bbsId = Integer.parseInt(request.getParameter("bbsId"));
+	if (bbsId == 0) {
 		out.println("<script>");
 		out.println("alert('유효하지 않은 글입니다.')");
 		out.println("location.href = 'bbs.jsp'");
@@ -71,49 +79,39 @@
 	}
 	BbsDAO bbsDAO = new BbsDAO();
 	Bbs bbs = bbsDAO.getBbs(bbsId);
-	if(bbs == null) {
+	if (!userId.equals(bbs.getUserId())) {
 		out.println("<script>");
-		out.println("alert('작성되지 않은 글입니다.')");
+		out.println("alert('권한이 없습니다.')");
 		out.println("location.href = 'bbs.jsp'");
 		out.println("</script>");
 	}
 %>
 		<div class="container pt-3">
-			<table class="table table-striped table-bordered text-center">
-				<thead class="thead-light">
-					<tr>
-						<th colspan="3">게시판 글보기</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td style="width: 20%;">글 제목</td>
-						<td colspan="2"><%=bbs.getBbsTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>") %></td>
-					</tr>
-					<tr>
-						<td>작성자</td>
-						<td colspan="2"><%=bbs.getUserId() %></td>
-					</tr>
-					<tr>
-						<td>작성일자</td>
-						<td colspan="2"><%=bbs.getBbsDate() %></td>
-					</tr>
-					<tr>
-						<td>내용</td>
-						<td colspan="2" style="min-height: 200px; text-align: left;"><%=bbs.getBbsContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>") %></td>
-					</tr>
-				</tbody>
-			</table>
-<%
-	String opt = "";
-	if(userId == null || !userId.equals(bbs.getUserId())) {
-		opt = " disabled";
-	}
-	bbsDAO.connClose();
-%>
-			<a href="bbs.jsp" class="btn btn-success float-left">목록</a>
-			<a href="update.jsp?bbsId=<%=bbsId %>" class="btn btn-primary float-right ml-2<%=opt %>">수정</a>
-			<a href="deleteAction.jsp?bbsId=<%=bbsId %>" class="btn btn-danger float-right<%=opt %>">삭제</a>
+			<form method="post" action="updateAction.jsp?bbsId=<%=bbsId%>">
+				<table class="table table-striped text-center">
+					<thead class="thead-light">
+						<tr>
+							<th>게시판 글수정</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" class="form-control" placeholder="글 제목"
+								name="bbsTitle" maxlength="50" value="<%=bbs.getBbsTitle() %>" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<textarea class="form-control" placeholder="글 내용" name="bbsContent"
+								maxlength="2048" style="height:350px; resize:none;"><%=bbs.getBbsContent() %></textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<a href="bbs.jsp" class="btn btn-success float-left">목록</a>
+				<button type="submit" class="btn btn-primary float-right">글수정</button>
+			</form>
 		</div>
 			
 		<!-- Optional JavaScript; -->
