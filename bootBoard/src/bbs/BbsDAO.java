@@ -84,11 +84,11 @@ public class BbsDAO {
 	}
 	
 	public Vector<Bbs> getList(int pageNumber) {
-		String sql = "SELECT * FROM bbs WHERE bbsId < ? AND bbsAvailable = 1 ORDER BY bbsId DESC LIMIT 10";
+		String sql = "SELECT * FROM bbs WHERE bbsId <= ? AND bbsAvailable = 1 ORDER BY bbsId DESC LIMIT 10";
 		Vector<Bbs> list = new Vector<Bbs>();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  getNext() - (pageNumber-1) * 10);
+			pstmt.setInt(1,  bbsCnt() - (pageNumber-1) * 10);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Bbs bbs = new Bbs();
@@ -106,11 +106,26 @@ public class BbsDAO {
 		return list;
 	}
 	
-	public boolean nextPage(int pageNumber) {
-		String sql = "SELECT * FROM bbs WHERE bbsId < ? AND bbsAvailable = 1";
+	public int bbsCnt() {
+		String sql = "SELECT COUNT(*) FROM bbs WHERE bbsId < ? AND bbsAvailable = 1";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  getNext() - (pageNumber - 1) * 10);
+			pstmt.setInt(1, getNext());
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public boolean nextPage(int pageNumber) {
+		String sql = "SELECT * FROM bbs WHERE bbsId <= ? AND bbsAvailable = 1";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,  bbsCnt() - (pageNumber - 1) * 10);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				return true;
@@ -150,6 +165,18 @@ public class BbsDAO {
 			pstmt.setString(1, bbsTitle);
 			pstmt.setString(2, bbsContent);
 			pstmt.setInt(3, bbsId);
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류 코드
+	}
+	
+	public int delete(int bbsId) {
+		String sql = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsId = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bbsId);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

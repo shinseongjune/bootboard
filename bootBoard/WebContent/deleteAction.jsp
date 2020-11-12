@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="bbs.BbsDAO, javax.naming.*, bbs.Bbs" %>
+<%@ page import="bbs.BbsDAO, javax.naming.*" %>
 <%request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
@@ -29,19 +29,11 @@
 		out.println("</script>");
 	}
 	BbsDAO bbsDAO = new BbsDAO();
-	Bbs bbs = bbsDAO.getBbs(bbsId);
-	if (!userId.equals(bbs.getUserId())) {
-		out.println("<script>");
-		out.println("alert('권한이 없습니다.')");
-		out.println("location.href = 'bbs.jsp'");
-		out.println("</script>");
-	}
-
-	int result = bbsDAO.update(bbsId, request.getParameter("bbsTitle"), request.getParameter("bbsContent"));
+	int result = bbsDAO.delete(bbsId);
 	bbsDAO.connClose();
 	if (result == -1) {
 		out.println("<script>");
-		out.println("alert('글수정에 실패하였습니다.')");
+		out.println("alert('글삭제에 실패하였습니다.')");
 		out.println("history.back()");
 		out.println("</script>");
 	} else {

@@ -113,7 +113,7 @@
 %>
 			<a href="bbs.jsp" class="btn btn-success float-left">목록</a>
 			<a href="update.jsp?bbsId=<%=bbsId %>" class="btn btn-primary float-right ml-2<%=opt %>">수정</a>
-			<a href="deleteAction.jsp?bbsId=<%=bbsId %>" class="btn btn-danger float-right<%=opt %>">삭제</a>
+			<a href="deleteAction.jsp?bbsId=<%=bbsId %>" class="btn btn-danger float-right<%=opt %>" onclick="return confirm('삭제를 진행하시겠습니까?')">삭제</a>
 		</div>
 			
 		<!-- Optional JavaScript; -->
