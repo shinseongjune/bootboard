@@ -71,10 +71,10 @@ public class BbsDAO {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,  getNext());
-			pstmt.setString(2, bbsTitle);
+			pstmt.setString(2, bbsTitle.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>"));
 			pstmt.setString(3, userId);
 			pstmt.setString(4, getDate());
-			pstmt.setString(5, bbsContent);
+			pstmt.setString(5, bbsContent.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll("\n", "<br/>"));
 			pstmt.setInt(6, 1);
 			return pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -119,5 +119,27 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public Bbs getBbs(int bbsId) {
+		String sql = "SELECT * FROM bbs WHERE bbsId = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bbsId);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Bbs bbs = new Bbs();
+				bbs.setBbsId(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserId(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				return bbs;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
