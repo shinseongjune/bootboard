@@ -84,11 +84,11 @@ public class BbsDAO {
 	}
 	
 	public Vector<Bbs> getList(int pageNumber) {
-		String sql = "SELECT * FROM bbs WHERE bbsId <= ? AND bbsAvailable = 1 ORDER BY bbsId DESC LIMIT 10";
+		String sql = "SELECT * FROM bbs WHERE bbsId < ? AND bbsAvailable = 1 ORDER BY bbsId DESC LIMIT 10";
 		Vector<Bbs> list = new Vector<Bbs>();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  bbsCnt() - (pageNumber-1) * 10);
+			pstmt.setInt(1,  getNext() - (pageNumber-2) * 10);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Bbs bbs = new Bbs();
@@ -106,26 +106,11 @@ public class BbsDAO {
 		return list;
 	}
 	
-	public int bbsCnt() {
-		String sql = "SELECT COUNT(*) FROM bbs WHERE bbsId < ? AND bbsAvailable = 1";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, getNext());
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				return rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return -1;
-	}
-	
 	public boolean nextPage(int pageNumber) {
 		String sql = "SELECT * FROM bbs WHERE bbsId <= ? AND bbsAvailable = 1";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  bbsCnt() - (pageNumber - 1) * 10);
+			pstmt.setInt(1,  getNext() - (pageNumber - 2) * 10);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				return true;
