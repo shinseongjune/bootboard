@@ -88,7 +88,7 @@ public class BbsDAO {
 		Vector<Bbs> list = new Vector<Bbs>();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,  getNext() - (pageNumber-2) * 10);
+			pstmt.setInt(1,  getNext() - (pageNumber-1) * 10);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Bbs bbs = new Bbs();
