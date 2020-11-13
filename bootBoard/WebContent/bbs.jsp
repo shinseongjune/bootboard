@@ -99,18 +99,27 @@
 				</tbody>
 			</table>
 <%
-	if(pageNumber != 1) {
-%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber - 1 %>" class="btn btn-success mr-1">이전</a>
-<%
-	}
-	if(bbsDAO.nextPage(pageNumber+1)) {
-%>
-			<a href="bbs.jsp?pageNumber=<%=pageNumber + 1 %>" class="btn btn-success">다음</a>
-<%
-	}
 	bbsDAO.connClose();
 %>			
+			<nav aria-label="Page navigation">
+				 <ul class="pagination justify-content-center">
+					<li class="page-item">
+						<a class="page-link" href="#">«</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="#">‹</a>
+					</li>
+					<li class="page-item"><a class="page-link" href="#">1</a></li>
+					<li class="page-item"><a class="page-link" href="#">2</a></li>
+					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<li class="page-item">
+						<a class="page-link" href="#">›</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="#">»</a>
+					</li>
+				 </ul>
+			</nav>
 			<a href="write.jsp" class="btn btn-primary float-right<%=opt %>" id="writeBtn">글쓰기</a>
 		</div>
 			
